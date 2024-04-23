@@ -27,15 +27,15 @@ export default defineConfig((options) => {
       }),
       // 用拆包插件来配置打包
       // https://github.com/sanyuan0704/vite-plugin-chunk-split/blob/master/README-CN.md
-      chunkSplitPlugin({
-        strategy: 'default',
-        customSplitting: {
-          // `react` and `react-dom` 会被打包到一个名为`render-vendor`的 chunk 里面(包括它们的一些依赖，如 object-assign)
-          'react-vendor': ['react', 'react-dom'],
-          // 将组件库的代码打包
-          'library': [/antd/],
-        },
-      }),
+      // chunkSplitPlugin({
+      //   strategy: 'default',
+      //   customSplitting: {
+      //     // `react` and `react-dom` 会被打包到一个名为`render-vendor`的 chunk 里面(包括它们的一些依赖，如 object-assign)
+      //     'react-vendor': [/react/, /react-dom/],
+      //     // 将组件库的代码打包
+      //     'library': [/antd/],
+      //   },
+      // }),
     ],
     optimizeDeps: {},
     resolve: {
@@ -47,12 +47,15 @@ export default defineConfig((options) => {
       rollupOptions: {
         plugins: [visualizer({ open: true })],
         output: {
-          // manualChunks: {
-          //   // 将React相关库打包成单独的chunk
-          //   'react-vendor': ['react', 'react-dom'],
-          //   // 将组件库的代码打包
-          //   library: ['antd'],
-          // },
+          chunkFileNames: 'js/[name]-[hash:8].js',
+          entryFileNames: 'js/[name]-[hash:8].js',
+          assetFileNames: '[ext]/[name]-[hash:8].[ext]',
+          manualChunks: {
+            // 将React相关库打包成单独的chunk
+            'react-vendor': ['react', 'react-dom'],
+            // 将组件库的代码打包
+            library: ['antd'],
+          },
         },
       },
     },
